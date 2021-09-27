@@ -5,28 +5,28 @@ use restson::{RestPath};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryAttributes {
-    name:           String
+    pub name:           String
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryRelationship {
-    id:             CategoryId
+    pub id:             CategoryId
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryParentRelationship {
-    data:           Option<CategoryRelationship>
+    pub data:           Option<CategoryRelationship>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryChildrenRelationships  {
-    data:           Vec<CategoryRelationship>
+    pub data:           Vec<CategoryRelationship>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryRelationships {
-    parent:         CategoryParentRelationship,
-    children:       CategoryChildrenRelationships
+    pub parent:         CategoryParentRelationship,
+    pub children:       CategoryChildrenRelationships
 }
 
 #[derive(Serialize, Debug)]
@@ -39,6 +39,10 @@ impl CategoryId {
         CategoryId {
             id:     id.to_string()
         }
+    }
+
+    pub fn id(&self) -> &str {
+        &self.id
     }
 }
 
@@ -55,19 +59,19 @@ impl<'de> Deserialize<'de> for CategoryId {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryData {
-    id:             CategoryId,
-    attributes:     CategoryAttributes,
-    relationships:  CategoryRelationships
+    pub id:             CategoryId,
+    pub attributes:     CategoryAttributes,
+    pub relationships:  CategoryRelationships
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoriesListResponse {
-    data:   Vec<CategoryData>
+    pub data:   Vec<CategoryData>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryResponse {
-    data:   CategoryData
+    pub data:   CategoryData
 }
 
 impl RestPath<()> for CategoriesListResponse {

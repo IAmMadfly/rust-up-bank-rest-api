@@ -6,18 +6,18 @@ use crate::general::{Pagination, MoneyObject, TransactionsLinks};
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountAttributes {
     #[serde(alias = "displayName")]
-    display_name:   String,
+    pub display_name:   String,
     #[serde(alias = "accountType")]
-    account_type:   String,
-    balance:        MoneyObject,
+    pub account_type:   String,
+    pub balance:        MoneyObject,
     #[serde(alias = "createdAt")]
-    created_at:     String
+    pub created_at:     String
 }
 
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountRelationships {
-    transactions:   TransactionsLinks
+    pub transactions:   TransactionsLinks
 }
 
 #[derive(Serialize, Debug)]
@@ -30,6 +30,10 @@ impl AccountId {
         AccountId {
             id:     id.to_string()
         }
+    }
+
+    pub fn id(&self) -> &str {
+        &self.id
     }
 }
 
@@ -46,20 +50,20 @@ impl<'de> Deserialize<'de> for AccountId {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountData {
-    id:             AccountId,
-    attributes:     AccountAttributes,
-    relationships:  AccountRelationships
+    pub id:             AccountId,
+    pub attributes:     AccountAttributes,
+    pub relationships:  AccountRelationships
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountsListResponse {
-    data:   Vec<AccountData>,
-    links:  Pagination<AccountsListResponse>
+    pub data:   Vec<AccountData>,
+    pub links:  Pagination<AccountsListResponse>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountResponse {
-    data:   AccountData
+    pub data:   AccountData
 }
 
 impl RestPath<()> for AccountsListResponse {

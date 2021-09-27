@@ -8,6 +8,12 @@ pub struct TagId {
     id:         String
 }
 
+impl TagId {
+    pub fn id(&self) -> &str {
+        &self.id
+    }
+}
+
 impl<'de> Deserialize<'de> for TagId {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
@@ -21,19 +27,19 @@ impl<'de> Deserialize<'de> for TagId {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagRelationships {
-    transactions:   TransactionsLinks
+    pub transactions:   TransactionsLinks
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagData {
-    id:                 TagId,
-    relationships:      TagRelationships
+    pub id:                 TagId,
+    pub relationships:      TagRelationships
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagListResponse {
-    data:   Vec<TagData>,
-    links:  Pagination<TagListResponse>
+    pub data:   Vec<TagData>,
+    pub links:  Pagination<TagListResponse>
 }
 
 impl RestPath<()> for TagListResponse {

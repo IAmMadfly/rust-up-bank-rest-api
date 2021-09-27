@@ -1,7 +1,13 @@
 [package]
 name = "rust-up-bank-api"
 version = "0.1.0"
+authors = ["Karl Runge"]
 edition = "2018"
+description = "Rust Library for accessing the Up Bank API in an easy way"
+repository = "https://github.com/IAmMadfly/rust-up-bank-rest-api"
+readme = "README.md"
+keywords = ["bank", "up", "upbank"]
+license = "MIT"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 

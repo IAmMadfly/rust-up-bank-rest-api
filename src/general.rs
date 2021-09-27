@@ -10,15 +10,30 @@ pub struct Pagination<T> {
     pub next: Option<Box<PageLink<T>>>,
 }
 
-#[derive(Serialize, Clone, Debug)]
+#[derive(Serialize, Debug)]
 pub struct PageLink<T> {
-    pub link:           String,
+    pub base_url:   String,
+    pub params:     String,
     phantom:        PhantomData<T>
 }
 
-impl<T: RestPath<PageLink<T>> + for<'de> serde::Deserialize<'de>> PageLink<T> {
-    pub fn get(self, client: &mut RestClient) -> Result<T, Error> {
+impl<T> Clone for PageLink<T> {
+    fn clone(&self) -> Self {
+        Self { 
+            base_url: self.base_url.clone(), 
+            params: self.params.clone(), 
+            phantom: PhantomData
+        }
+    }
+}
+
+impl<'a ,T: 'a +  RestPath<&'a PageLink<T>> + for<'de> serde::Deserialize<'de>> PageLink<T> {
+    pub fn get_blocking(&'a self, client: &mut RestClient) -> Result<T, Error> {
         client.get(self)
+    }
+
+    pub async fn get(&'a self, client: &mut restson::RestClient) -> Result<T, Error> {
+        client.get(self).await
     }
 }
 
@@ -27,18 +42,23 @@ impl<'de, T> Deserialize<'de> for PageLink<T> {
     where
         D: serde::Deserializer<'de>
     {
-        let link: String = Deserialize::deserialize(deserializer)?;
+        let mut params: String = Deserialize::deserialize(deserializer)?;
 
-        let index = link.find("?");
+        let index_maybe = params.find("?");
 
-        if let None = index {
-            // panic!("Shits broekn");
-            return Err(de::Error::custom("Error"));
-            // return Err("Failed to get index of start of parameters in URL")
-        }
+        let base_url: String = if let Some(index) = index_maybe {
+            params.drain(..(index+1)).collect()
+        } else {
+            return Err(
+                de::Error::custom(
+                    "Failed to get index of parameters in URL for PageLink"
+                )
+            );
+        };
 
         Ok(PageLink {
-            link,
+            base_url,
+            params,
             phantom: PhantomData
         })
     }
@@ -46,7 +66,7 @@ impl<'de, T> Deserialize<'de> for PageLink<T> {
 
 #[derive(Serialize, Debug)]
 pub struct RelationLink {
-    link:   String
+    pub link:   String
 }
 
 impl<'de> Deserialize<'de> for RelationLink {
@@ -65,12 +85,12 @@ impl<'de> Deserialize<'de> for RelationLink {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RelationshipsLink {
-    related:        String
+    pub related:        String
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionsLinks {
-    links:          Option<RelationshipsLink>
+    pub links:          Option<RelationshipsLink>
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -84,19 +104,19 @@ pub struct MoneyObject {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CashbackObject {
-    description:        String,
-    amount:             MoneyObject
+    pub description:        String,
+    pub amount:             MoneyObject
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct RoundUp {
-    amount:             MoneyObject,
-    boost_portion:      Option<MoneyObject>
+    pub amount:             MoneyObject,
+    pub boost_portion:      Option<MoneyObject>
 }
 
 #[derive(Serialize, Debug)]
 pub struct TimeObject {
-    time:               String
+    pub time:               String
 }
 
 impl<'de> Deserialize<'de> for TimeObject {
