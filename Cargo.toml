@@ -1,5 +1,5 @@
 [package]
-name = "rust-up-bank-api"
+name = "up-bank-api"
 version = "0.1.0"
 authors = ["Karl Runge"]
 edition = "2018"
