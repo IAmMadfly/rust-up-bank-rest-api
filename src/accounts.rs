@@ -55,6 +55,14 @@ pub struct AccountData {
     pub relationships:  AccountRelationships
 }
 
+/// Can be used to get the Accounts list, with the use of a RestClient
+/// 
+/// Example:
+/// ```
+/// let mut client = get_new_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT"))
+///     .unwrap();
+/// let accounts: AccountsListResponse = client.get(()).unwrap();
+/// ```
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountsListResponse {
     pub data:   Vec<AccountData>,
