@@ -9,9 +9,15 @@ readme = "README.md"
 keywords = ["bank", "up", "upbank"]
 license = "MIT"
 
+[lib]
+doctest = false
+
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
 restson = "^1.0.0"
 serde = "1.0.130"
 serde_derive = "1.0.130"
+
+[dev-dependencies]
+toml = "0.5.8"

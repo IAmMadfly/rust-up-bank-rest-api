@@ -25,7 +25,7 @@ mod test;
 /// Example:
 ///
 /// ```
-/// if let Ok(client) = get_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT")) {
+/// if let Ok(client) = get_new_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT")) {
 ///     let accounts: AccountListsResponse = client.get(()).await.unwrap();
 /// }
 /// ```
