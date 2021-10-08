@@ -9,12 +9,6 @@ pub struct TransactionId {
 }
 
 impl TransactionId {
-    pub fn new(id: &str) -> TransactionId {
-        TransactionId {
-            id:     id.to_string()
-        }
-    }
-
     pub fn id(&self) -> &str {
         &self.id
     }
