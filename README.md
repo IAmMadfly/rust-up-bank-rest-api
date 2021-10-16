@@ -9,7 +9,7 @@ A personal access token is required to query your personal data from the API and
 
 ### Testing the library
 For the use of testing this library, you have 2 options on token location.
-The prefered storage method is through an environement variable, which may be called \"UP_TOKEN\" such as:
+The preferred storage method is through an environment variable, which may be called \"UP_TOKEN\" such as:
 
 ```sh
 export UP_TOKEN="up:yeah:YourTestUpTokenHere"
