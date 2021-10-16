@@ -56,7 +56,7 @@ pub struct AccountData {
 }
 
 /// Can be used to get the Accounts list, with the use of a RestClient
-/// 
+///
 /// Example:
 /// ```
 /// let mut client = get_new_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT"))
