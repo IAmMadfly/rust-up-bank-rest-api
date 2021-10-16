@@ -3,50 +3,15 @@
 
 #[cfg(test)]
 mod tests {
-    use std::fs;
-    use std::env;
-    use std::path::Path;
-
     use restson::Error;
     use restson::RestClient;
     use restson::blocking;
-    use serde_derive::Deserialize;
-    use toml;
 
     use crate::accounts::AccountsListResponse;
     use crate::get_new_client;
     use crate::get_new_blocking_client;
     use crate::transactions::TransactionListResponse;
-
-    #[derive(Deserialize)]
-    struct Config {
-        token: String
-    }
-
-    fn get_token() -> String {
-        let test_token_path = "./test.toml";
-        let config: Config;
-
-        // Read Up Authentication token from environment variable
-        if let Ok(token) = env::var("UP_TOKEN") {
-            config = Config { token };
-        }
-        // Else read from test file
-        else if Path::new(test_token_path).exists() {
-            config = toml::from_str(
-                &fs::read_to_string(
-                    test_token_path
-                )
-                .expect("Failed to read config file")
-            ).expect("Failed to parse into config");
-        }
-        // Else error as no authentication token can be found
-        else {
-            panic!("No authentication token has been provided, please set UP_TOKEN env variable or consult documentation.")
-        }
-
-        config.token
-    }
+    use crate::get_token;
 
     fn get_blocking_client() -> Result<blocking::RestClient, Error> {
         let client = get_new_blocking_client(get_token());

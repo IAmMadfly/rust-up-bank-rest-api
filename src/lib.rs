@@ -3,8 +3,20 @@
 //! This library is to be used to simplify the access of Up Bank data through
 //! Rust applications.
 
-// use serde::{Deserialize, Serialize};
-pub use restson::{RestClient, blocking, Error};
+use std::fs;
+use std::path::Path;
+use std::env;
+
+use toml;
+pub use restson::{
+    RestClient,
+    blocking,
+    Error
+};
+use serde::{
+    Deserialize,
+    // Serialize
+};
 
 /// Module for all Transaction related data
 pub mod transactions;
@@ -18,6 +30,11 @@ pub mod tags;
 pub mod general;
 
 mod test;
+
+#[derive(Deserialize)]
+pub struct Config {
+    token: String
+}
 
 /// Pass in your Up Bank token, returns an *async* RestClient where
 /// the API can be easily called, with the required results returned.
@@ -38,7 +55,7 @@ pub fn get_new_client(token: String) -> Result<RestClient, Error> {
 
 /// Pass in your Up Bank token, returns a *blocking* RestClient where
 /// the API can be easily called, with the required results returned.
-/// 
+///
 /// Example:
 ///
 /// ```
@@ -104,6 +121,31 @@ pub fn get_new_blocking_client(token: String) -> Result<blocking::RestClient, Er
 //             }
 //         }
 //     }
-    
+
 // }
+
+pub fn get_token() -> String {
+    let test_token_path = "./test.toml";
+    let config: Config;
+
+    // Read Up Authentication token from environment variable
+    if let Ok(token) = env::var("UP_TOKEN") {
+        config = Config { token };
+    }
+    // Else read from test file
+    else if Path::new(test_token_path).exists() {
+        config = toml::from_str(
+            &fs::read_to_string(
+                test_token_path
+            )
+            .expect("Failed to read config file")
+        ).expect("Failed to parse into config");
+    }
+    // Else error as no authentication token can be found
+    else {
+        panic!("No authentication token has been provided, please set UP_TOKEN env variable or consult documentation.")
+    }
+
+    config.token
+}
 
