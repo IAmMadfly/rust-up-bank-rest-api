@@ -6,7 +6,10 @@ It also provides the required types to gather the data
 ## Personal Access Token
 
 A personal access token is required to query your personal data from the API and can be generated [here](https://api.up.com.au/getting_started).
-This token should be stored in an environment variable called \"UP_TOKEN\" such as:
+
+### Testing the library
+For the use of testing this library, you have 2 options on token location.
+The prefered storage method is through an environement variable, which may be called \"UP_TOKEN\" such as:
 
 ```sh
 export UP_TOKEN="up:yeah:YourTestUpTokenHere"
