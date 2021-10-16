@@ -1,7 +1,10 @@
 [package]
 name = "up_bank_api"
-version = "0.1.1"
-authors = ["Karl Runge"]
+version = "0.1.3"
+authors = [
+    "Karl Runge",
+    "Connor Jarvis"
+]
 edition = "2018"
 description = "Rust Library for accessing the Up Bank API in an easy way"
 repository = "https://github.com/IAmMadfly/rust-up-bank-rest-api"
@@ -21,3 +24,6 @@ serde_derive = "1.0.130"
 toml = "0.5.8"
 
 [dev-dependencies]
+
+[[example]]
+name = "list-accounts"
