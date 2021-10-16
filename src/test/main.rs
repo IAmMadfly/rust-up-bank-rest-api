@@ -4,6 +4,8 @@
 #[cfg(test)]
 mod tests {
     use std::fs;
+    use std::env;
+    use std::path::Path;
 
     use restson::Error;
     use restson::RestClient;
@@ -22,10 +24,27 @@ mod tests {
     }
 
     fn get_token() -> String {
-        let config: Config = toml::from_str(
-            &fs::read_to_string("./test.toml")
+        let test_token_path = "./test.toml";
+        let config: Config;
+
+        // Read Up Authentication token from environment variable
+        if let Ok(token) = env::var("UP_TOKEN") {
+            config = Config { token };
+        }
+        // Else read from test file
+        else if Path::new(test_token_path).exists() {
+            config = toml::from_str(
+                &fs::read_to_string(
+                    test_token_path
+                )
                 .expect("Failed to read config file")
             ).expect("Failed to parse into config");
+        }
+        // Else error as no authentication token can be found
+        else {
+            panic!("No authentication token has been provided, please set UP_TOKEN env variable or consult documentation.")
+        }
+
         config.token
     }
 
