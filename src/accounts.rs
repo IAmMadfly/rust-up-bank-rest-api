@@ -1,35 +1,32 @@
+use restson::RestPath;
 use serde::{Deserialize, Serialize};
-use restson::{RestPath};
 
-use crate::general::{Pagination, MoneyObject, TransactionsLinks};
+use crate::general::{MoneyObject, Pagination, TransactionsLinks};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountAttributes {
     #[serde(alias = "displayName")]
-    pub display_name:   String,
+    pub display_name: String,
     #[serde(alias = "accountType")]
-    pub account_type:   String,
-    pub balance:        MoneyObject,
+    pub account_type: String,
+    pub balance: MoneyObject,
     #[serde(alias = "createdAt")]
-    pub created_at:     String
+    pub created_at: String,
 }
 
-
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountRelationships {
-    pub transactions:   TransactionsLinks
+    pub transactions: TransactionsLinks,
 }
 
-#[derive(Serialize, Debug)]
+#[derive(Serialize, Debug, Clone)]
 pub struct AccountId {
-    id:             String
+    pub id: String,
 }
 
 impl AccountId {
     pub fn new(id: &str) -> AccountId {
-        AccountId {
-            id:     id.to_string()
-        }
+        AccountId { id: id.to_string() }
     }
 
     pub fn id(&self) -> &str {
@@ -40,23 +37,22 @@ impl AccountId {
 impl<'de> Deserialize<'de> for AccountId {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'de> {
+        D: serde::Deserializer<'de>,
+    {
         let s: String = Deserialize::deserialize(deserializer)?;
-        Ok(AccountId {
-            id:     s
-        })
+        Ok(AccountId { id: s })
     }
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountData {
-    pub id:             AccountId,
-    pub attributes:     AccountAttributes,
-    pub relationships:  AccountRelationships
+    pub id: AccountId,
+    pub attributes: AccountAttributes,
+    pub relationships: AccountRelationships,
 }
 
 /// Can be used to get the Accounts list, with the use of a RestClient
-/// 
+///
 /// Example:
 /// ```
 /// let mut client = get_new_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT"))
@@ -65,13 +61,13 @@ pub struct AccountData {
 /// ```
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountsListResponse {
-    pub data:   Vec<AccountData>,
-    pub links:  Pagination<AccountsListResponse>
+    pub data: Vec<AccountData>,
+    pub links: Pagination<AccountsListResponse>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountResponse {
-    pub data:   AccountData
+    pub data: AccountData,
 }
 
 impl RestPath<()> for AccountsListResponse {
@@ -91,4 +87,3 @@ impl RestPath<AccountId> for AccountResponse {
 //         Ok(String::from("accounts")+"?"+)
 //     }
 // }
-

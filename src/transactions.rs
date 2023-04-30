@@ -1,11 +1,19 @@
+use restson::RestPath;
 use serde::{Deserialize, Serialize};
-use restson::{RestPath};
 
-use crate::{accounts::AccountId, categories::CategoryRelationship, general::{CashbackObject, MoneyObject, PageLink, Pagination, RelationLink, RelationshipsLink, RoundUp, TimeObject}, tags::TagId};
+use crate::{
+    accounts::AccountId,
+    categories::CategoryRelationship,
+    general::{
+        CashbackObject, MoneyObject, PageLink, Pagination, RelationLink, RelationshipsLink,
+        RoundUp, TimeObject,
+    },
+    tags::TagId,
+};
 
 #[derive(Serialize, Debug)]
 pub struct TransactionId {
-    id:             String
+    id: String,
 }
 
 impl TransactionId {
@@ -17,104 +25,102 @@ impl TransactionId {
 impl<'de> Deserialize<'de> for TransactionId {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'de> {
+        D: serde::Deserializer<'de>,
+    {
         let s: String = Deserialize::deserialize(deserializer)?;
-        Ok(TransactionId {
-            id:     s
-        })
+        Ok(TransactionId { id: s })
     }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionHoldInfo {
-    pub amount:         MoneyObject,
+    pub amount: MoneyObject,
     #[serde(alias = "foreignAmount")]
-    pub foreign_amount: MoneyObject
+    pub foreign_amount: MoneyObject,
 }
-
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionAttributes {
-    pub status:             String,
+    pub status: String,
     #[serde(alias = "rawText")]
-    pub raw_text:           Option<String>,
-    pub description:        String,
-    pub message:            Option<String>,
+    pub raw_text: Option<String>,
+    pub description: String,
+    pub message: Option<String>,
     #[serde(alias = "holdAmount")]
-    pub hold_info:          Option<TransactionHoldInfo>,
+    pub hold_info: Option<TransactionHoldInfo>,
     #[serde(alias = "roundUp")]
-    pub round_up:           Option<RoundUp>,
-    pub cashback:           Option<CashbackObject>,
-    pub amount:             MoneyObject,
+    pub round_up: Option<RoundUp>,
+    pub cashback: Option<CashbackObject>,
+    pub amount: MoneyObject,
     #[serde(alias = "foreignAmount")]
-    pub foreign_amount:     Option<MoneyObject>,
+    pub foreign_amount: Option<MoneyObject>,
     #[serde(alias = "settledAt")]
-    pub settled_at:         Option<TimeObject>,
+    pub settled_at: Option<TimeObject>,
     #[serde(alias = "createdAt")]
-    pub created_at:         TimeObject
+    pub created_at: TimeObject,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountRelationship {
-    pub id:                 AccountId
+    pub id: AccountId,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct AccountObject {
-    pub data:               Option<AccountRelationship>,
-    pub links:              Option<RelationshipsLink>
+    pub data: Option<AccountRelationship>,
+    pub links: Option<RelationshipsLink>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct CategoryObject {
-    pub data:               Option<CategoryRelationship>,
-    pub links:              Option<RelationshipsLink>
+    pub data: Option<CategoryRelationship>,
+    pub links: Option<RelationshipsLink>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionTagsData {
-    pub id:                 TagId
+    pub id: TagId,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionTagLink {
     #[serde(alias = "self")]
-    pub self_link:          RelationLink
+    pub self_link: RelationLink,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-pub struct  TransactionTags {
-    pub data:               Vec<TransactionTagsData>,
-    pub links:              Option<TransactionTagLink>
+pub struct TransactionTags {
+    pub data: Vec<TransactionTagsData>,
+    pub links: Option<TransactionTagLink>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionRelationships {
-    pub account:            AccountObject,
+    pub account: AccountObject,
     #[serde(alias = "transferAccount")]
-    pub transfer_account:   Option<AccountObject>,
-    pub category:           CategoryObject,
+    pub transfer_account: Option<AccountObject>,
+    pub category: CategoryObject,
     #[serde(alias = "parentCategory")]
-    pub parent_category:    CategoryObject,
-    pub tags:               TransactionTags
+    pub parent_category: CategoryObject,
+    pub tags: TransactionTags,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionData {
-    pub id:                 TransactionId,
-    pub attributes:         TransactionAttributes,
-    pub relationships:      TransactionRelationships
+    pub id: TransactionId,
+    pub attributes: TransactionAttributes,
+    pub relationships: TransactionRelationships,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionListResponse {
-    pub data:       Vec<TransactionData>,
-    pub links:  Pagination<TransactionListResponse>
+    pub data: Vec<TransactionData>,
+    pub links: Pagination<TransactionListResponse>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionResponse {
-    pub data:       TransactionData
+    pub data: TransactionData,
 }
 
 impl RestPath<()> for TransactionListResponse {
@@ -125,8 +131,15 @@ impl RestPath<()> for TransactionListResponse {
 
 impl RestPath<&PageLink<TransactionListResponse>> for TransactionListResponse {
     fn get_path(link: &PageLink<TransactionListResponse>) -> Result<String, restson::Error> {
-        let url = String::from("transactions?") + &link.params;
+        let url = String::from("transactions?") + link.params();
         println!("Link: {}", url);
+        Ok(url)
+    }
+}
+
+impl RestPath<&AccountId> for TransactionListResponse {
+    fn get_path(par: &AccountId) -> Result<String, restson::Error> {
+        let url = String::from(format!("accounts/{}/transactions", par.id()));
         Ok(url)
     }
 }
@@ -136,4 +149,3 @@ impl RestPath<TransactionId> for TransactionResponse {
         Ok(String::from("transactions/") + &id.id)
     }
 }
-

@@ -16,8 +16,9 @@ doctest = false
 
 [dependencies]
 restson = "^1.0.0"
+reqwest = "0.11.16"
 serde = "1.0.130"
 serde_derive = "1.0.130"
 
 [dev-dependencies]
-toml = "0.5.8"
+toml = "0.7.3"
