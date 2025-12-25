@@ -81,10 +81,17 @@ pub struct AccountObject {
     pub links: Option<RelationshipsLink>,
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Clone)]
+pub struct CategoryLinks {
+    #[serde(rename = "self")]
+    pub self_link: Option<String>,
+    pub related: Option<String>,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct CategoryObject {
     pub data: Option<CategoryRelationship>,
-    pub links: Option<RelationshipsLink>,
+    pub links: Option<CategoryLinks>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -94,7 +101,7 @@ pub struct TransactionTagsData {
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionTagLink {
-    #[serde(alias = "self")]
+    #[serde(rename = "self")]
     pub self_link: RelationLink,
 }
 
