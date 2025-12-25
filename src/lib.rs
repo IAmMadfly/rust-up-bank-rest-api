@@ -17,7 +17,7 @@ pub mod transactions;
 pub mod general;
 pub mod utility;
 
-mod client;
+#[cfg(test)]
 mod test;
 
 /// Pass in your Up Bank token, returns an *async* RestClient where
