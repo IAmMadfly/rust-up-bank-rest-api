@@ -39,13 +39,23 @@ pub struct TransactionHoldInfo {
     pub foreign_amount: MoneyObject,
 }
 
+#[derive(Serialize, Deserialize, Debug, Clone, Copy)]
+pub enum TransactionStatus {
+    #[serde(alias = "held")]
+    HELD,
+    #[serde(alias = "settled")]
+    SETTLED,
+}
+
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TransactionAttributes {
-    pub status: String,
+    pub status: TransactionStatus,
     #[serde(alias = "rawText")]
     pub raw_text: Option<String>,
     pub description: String,
     pub message: Option<String>,
+    #[serde(alias = "isCategorizable")]
+    pub is_categorizable: bool,
     #[serde(alias = "holdAmount")]
     pub hold_info: Option<TransactionHoldInfo>,
     #[serde(alias = "roundUp")]
@@ -139,7 +149,7 @@ impl RestPath<&PageLink<TransactionListResponse>> for TransactionListResponse {
 
 impl RestPath<&AccountId> for TransactionListResponse {
     fn get_path(par: &AccountId) -> Result<String, restson::Error> {
-        let url = String::from(format!("accounts/{}/transactions", par.id()));
+        let url = format!("accounts/{}/transactions", par.id());
         Ok(url)
     }
 }

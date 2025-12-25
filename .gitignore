@@ -1,2 +1,6 @@
+# Ignore build artifacts and test configuration files
 /target
 *test.toml
+
+# Ignore IDE specific files
+/.claude/

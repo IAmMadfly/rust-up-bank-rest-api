@@ -4,11 +4,19 @@ use serde::{Deserialize, Serialize};
 use crate::general::{MoneyObject, Pagination, TransactionsLinks};
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
+pub enum AccountType {
+    #[serde(alias = "saver")]
+    SAVER,
+    #[serde(alias = "transactional")]
+    TRANSACTIONAL,
+}
+
+#[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct AccountAttributes {
     #[serde(alias = "displayName")]
     pub display_name: String,
     #[serde(alias = "accountType")]
-    pub account_type: String,
+    pub account_type: AccountType,
     pub balance: MoneyObject,
     #[serde(alias = "createdAt")]
     pub created_at: String,
@@ -82,8 +90,52 @@ impl RestPath<AccountId> for AccountResponse {
     }
 }
 
-// impl RestPath<AccountId> for AccountsListResponse {
-//     fn get_path(query: AccountId) -> Result<String, restson::Error> {
-//         Ok(String::from("accounts")+"?"+)
-//     }
-// }
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use serde_json;
+
+    #[test]
+    fn test_account_type_parses_from_uppercase() {
+        let saver_json = r#""SAVER""#;
+        let transactional_json = r#""TRANSACTIONAL""#;
+
+        let saver: AccountType = serde_json::from_str(saver_json).unwrap();
+        let transactional: AccountType = serde_json::from_str(transactional_json).unwrap();
+
+        match saver {
+            AccountType::SAVER => (),
+            _ => panic!("Expected SAVER variant"),
+        }
+
+        match transactional {
+            AccountType::TRANSACTIONAL => (),
+            _ => panic!("Expected TRANSACTIONAL variant"),
+        }
+    }
+
+    #[test]
+    fn test_account_type_parses_from_lowercase() {
+        let saver_json = r#""saver""#;
+        let transactional_json = r#""transactional""#;
+
+        let saver: Result<AccountType, _> = serde_json::from_str(saver_json);
+        let transactional: Result<AccountType, _> = serde_json::from_str(transactional_json);
+
+        assert!(saver.is_ok(), "Should parse 'saver' successfully");
+        assert!(
+            transactional.is_ok(),
+            "Should parse 'transactional' successfully"
+        );
+
+        match saver.unwrap() {
+            AccountType::SAVER => (),
+            _ => panic!("Expected SAVER variant"),
+        }
+
+        match transactional.unwrap() {
+            AccountType::TRANSACTIONAL => (),
+            _ => panic!("Expected TRANSACTIONAL variant"),
+        }
+    }
+}

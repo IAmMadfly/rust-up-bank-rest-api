@@ -3,7 +3,7 @@ use reqwest::{
     Client,
 };
 
-struct UpClient {
+pub struct UpClient {
     req_client: Client,
     base_url: &'static str,
 }
