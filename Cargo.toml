@@ -1,6 +1,6 @@
 [package]
 name = "up-bank-api"
-version = "0.1.3"
+version = "0.1.4"
 authors = ["Karl Runge"]
 edition = "2018"
 description = "Rust Library for accessing the Up Bank API in an easy way"

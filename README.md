@@ -8,17 +8,10 @@ It also provides the required types to gather the data
 A personal access token is required to query your personal data from the API and can be generated [here](https://api.up.com.au/getting_started).
 
 ### Testing the library
-For the use of testing this library, you have 2 options on token location.
-The preferred storage method is through an environment variable, which may be called \"UP_TOKEN\" such as:
+To test this library, create a file called `.test_token` in the root of this repository containing your personal access token:
 
-```sh
-export UP_TOKEN="up:yeah:YourTestUpTokenHere"
 ```
-
-Otherwise a file can be stored on the root of this repo called "test.toml" containing the following contents:
-
-```toml
-token = "up:yeah:YourTestUpTokenHere"
+up:yeah:YourTestUpTokenHere
 ```
 
 ## Testing your access token
