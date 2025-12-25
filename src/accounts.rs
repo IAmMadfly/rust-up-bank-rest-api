@@ -93,7 +93,6 @@ impl RestPath<AccountId> for AccountResponse {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use serde_json;
 
     #[test]
     fn test_account_type_parses_from_uppercase() {

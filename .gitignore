@@ -4,3 +4,6 @@
 
 # Ignore IDE specific files
 /.claude/
+
+# Ignore test files
+.test_token

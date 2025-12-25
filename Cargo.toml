@@ -15,11 +15,11 @@ doctest = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-restson = "^1.0.0"
-reqwest = "0.11.16"
-serde = "1.0.130"
-serde_derive = "1.0.130"
+restson = "^1.5.0"
+reqwest = "0.12.28"
+serde = "1.0.228"
+serde_derive = "1.0.228"
+schannel = "0.1.27"
 
 [dev-dependencies]
-toml = "0.7.3"
-serde_json = "1.0"
+serde_json = "1.0.147"
