@@ -101,10 +101,10 @@ pub struct TransactionsLinks {
 #[derive(Serialize, Deserialize, Debug, Clone)]
 pub struct MoneyObject {
     #[serde(alias = "currencyCode")]
-    currency_code: String,
-    value: String,
+    pub currency_code: String,
+    pub value: String,
     #[serde(alias = "valueInBaseUnits")]
-    value_in_base_units: i64,
+    pub value_in_base_units: i64,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone)]
