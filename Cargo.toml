@@ -1,6 +1,6 @@
 [package]
 name = "up-bank-api"
-version = "0.1.5"
+version = "0.1.6"
 authors = ["Karl Runge"]
 edition = "2018"
 description = "Rust Library for accessing the Up Bank API in an easy way"
@@ -23,3 +23,4 @@ schannel = "0.1.27"
 
 [dev-dependencies]
 serde_json = "1.0.147"
+reqwest = { version = "0.12.28", features = ["blocking"] }

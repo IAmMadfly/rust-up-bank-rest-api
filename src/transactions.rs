@@ -36,7 +36,7 @@ impl<'de> Deserialize<'de> for TransactionId {
 pub struct TransactionHoldInfo {
     pub amount: MoneyObject,
     #[serde(alias = "foreignAmount")]
-    pub foreign_amount: MoneyObject,
+    pub foreign_amount: Option<MoneyObject>,
 }
 
 #[derive(Serialize, Deserialize, Debug, Clone, Copy)]
@@ -56,7 +56,7 @@ pub struct TransactionAttributes {
     pub message: Option<String>,
     #[serde(alias = "isCategorizable")]
     pub is_categorizable: bool,
-    #[serde(alias = "holdAmount")]
+    #[serde(alias = "holdInfo")]
     pub hold_info: Option<TransactionHoldInfo>,
     #[serde(alias = "roundUp")]
     pub round_up: Option<RoundUp>,
