@@ -26,12 +26,12 @@ mod test;
 /// Example:
 ///
 /// ```
-/// if let Ok(client) = get_new_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT")) {
+/// if let Ok(client) = get_new_client(String::from("up:demo:rtHR7D3eBEqKPiIT")) {
 ///     let accounts: AccountListsResponse = client.get(()).await.unwrap();
 /// }
 /// ```
 pub fn get_new_client(token: String) -> Result<RestClient, Error> {
-    let key = format!("Bearer  {}", token);
+    let key = format!("Bearer {}", token);
     let mut client = RestClient::new("https://api.up.com.au/api/v1/")?;
     client.set_header("Authorization", &key)?;
     Ok(client)
@@ -43,12 +43,12 @@ pub fn get_new_client(token: String) -> Result<RestClient, Error> {
 /// Example:
 ///
 /// ```
-/// if let Ok(client) = get_new_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT")) {
+/// if let Ok(client) = get_new_blocking_client(String::from("up:demo:rtHR7D3eBEqKPiIT")) {
 ///     let accounts: AccountListsResponse = client.get(()).unwrap();
 /// }
 /// ```
 pub fn get_new_blocking_client(token: String) -> Result<blocking::RestClient, Error> {
-    let key = format!("Bearer  {}", token);
+    let key = format!("Bearer {}", token);
     let mut client = RestClient::new_blocking("https://api.up.com.au/api/v1/")?;
     client.set_header("Authorization", &key)?;
     Ok(client)

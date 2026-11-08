@@ -1,11 +1,11 @@
+use restson::RestPath;
 use serde::{Deserialize, Serialize};
-use restson::{RestPath};
 
 use crate::general::{Pagination, TransactionsLinks};
 
 #[derive(Serialize, Debug)]
 pub struct TagId {
-    id:         String
+    id: String,
 }
 
 impl TagId {
@@ -17,29 +17,28 @@ impl TagId {
 impl<'de> Deserialize<'de> for TagId {
     fn deserialize<D>(deserializer: D) -> Result<Self, D::Error>
     where
-        D: serde::Deserializer<'de> {
+        D: serde::Deserializer<'de>,
+    {
         let s: String = Deserialize::deserialize(deserializer)?;
-        Ok(TagId {
-            id:     s
-        })
+        Ok(TagId { id: s })
     }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagRelationships {
-    pub transactions:   TransactionsLinks
+    pub transactions: TransactionsLinks,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagData {
-    pub id:                 TagId,
-    pub relationships:      TagRelationships
+    pub id: TagId,
+    pub relationships: TagRelationships,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct TagListResponse {
-    pub data:   Vec<TagData>,
-    pub links:  Pagination<TagListResponse>
+    pub data: Vec<TagData>,
+    pub links: Pagination<TagListResponse>,
 }
 
 impl RestPath<()> for TagListResponse {
@@ -48,3 +47,13 @@ impl RestPath<()> for TagListResponse {
     }
 }
 
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn tag_id_deserializes_to_getter() {
+        let id: TagId = serde_json::from_str(r#""travel""#).unwrap();
+        assert_eq!(id.id(), "travel");
+    }
+}

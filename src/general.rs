@@ -134,3 +134,25 @@ impl<'de> Deserialize<'de> for TimeObject {
         Ok(TimeObject { time: string })
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn page_link_splits_base_url_and_params() {
+        let link: PageLink<()> = serde_json::from_str(
+            r#""https://api.up.com.au/api/v1/transactions?page[size]=10&page[after]=abc""#,
+        )
+        .unwrap();
+        assert!(link.base_url().starts_with("https://api.up.com.au/api/v1/transactions"));
+        assert_eq!(link.params(), "page[size]=10&page[after]=abc");
+    }
+
+    #[test]
+    fn page_link_without_query_string_fails_to_deserialize() {
+        let result: Result<PageLink<()>, _> =
+            serde_json::from_str(r#""https://api.up.com.au/api/v1/transactions""#);
+        assert!(result.is_err());
+    }
+}

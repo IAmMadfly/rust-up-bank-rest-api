@@ -63,7 +63,7 @@ pub struct AccountData {
 ///
 /// Example:
 /// ```
-/// let mut client = get_new_blocking_client(String::from("Bearer up:demo:rtHR7D3eBEqKPiIT"))
+/// let mut client = get_new_blocking_client(String::from("up:demo:rtHR7D3eBEqKPiIT"))
 ///     .unwrap();
 /// let accounts: AccountsListResponse = client.get(()).unwrap();
 /// ```
@@ -87,6 +87,22 @@ impl RestPath<()> for AccountsListResponse {
 impl RestPath<AccountId> for AccountResponse {
     fn get_path(id: AccountId) -> Result<String, restson::Error> {
         Ok(String::from("accounts/") + &id.id)
+    }
+}
+
+#[cfg(test)]
+mod id_tests {
+    use super::*;
+
+    #[test]
+    fn account_id_new_and_getter() {
+        assert_eq!(AccountId::new("acc-123").id(), "acc-123");
+    }
+
+    #[test]
+    fn account_id_deserializes_to_getter() {
+        let id: AccountId = serde_json::from_str(r#""acc-123""#).unwrap();
+        assert_eq!(id.id(), "acc-123");
     }
 }
 

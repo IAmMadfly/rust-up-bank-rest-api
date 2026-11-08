@@ -166,3 +166,14 @@ impl RestPath<TransactionId> for TransactionResponse {
         Ok(String::from("transactions/") + &id.id)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn transaction_id_deserializes_to_getter() {
+        let id: TransactionId = serde_json::from_str(r#""txn-456""#).unwrap();
+        assert_eq!(id.id(), "txn-456");
+    }
+}

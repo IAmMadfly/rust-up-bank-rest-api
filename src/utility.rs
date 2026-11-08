@@ -24,3 +24,15 @@ impl RestPath<()> for Ping {
         Ok(String::from("util/ping"))
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn ping_status_returns_status_emoji() {
+        let ping: Ping =
+            serde_json::from_str(r#"{"meta":{"id":"abc","statusEmoji":"ok"}}"#).unwrap();
+        assert_eq!(ping.status(), "ok");
+    }
+}

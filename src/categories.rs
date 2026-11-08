@@ -80,3 +80,19 @@ impl RestPath<CategoryId> for CategoryResponse {
         Ok(String::from("categories/") + &id.id)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn category_id_new_and_getter() {
+        assert_eq!(CategoryId::new("food-and-drink").id(), "food-and-drink");
+    }
+
+    #[test]
+    fn category_id_deserializes_to_getter() {
+        let id: CategoryId = serde_json::from_str(r#""food-and-drink""#).unwrap();
+        assert_eq!(id.id(), "food-and-drink");
+    }
+}
