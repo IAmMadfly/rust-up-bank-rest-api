@@ -145,7 +145,9 @@ mod tests {
             r#""https://api.up.com.au/api/v1/transactions?page[size]=10&page[after]=abc""#,
         )
         .unwrap();
-        assert!(link.base_url().starts_with("https://api.up.com.au/api/v1/transactions"));
+        assert!(link
+            .base_url()
+            .starts_with("https://api.up.com.au/api/v1/transactions"));
         assert_eq!(link.params(), "page[size]=10&page[after]=abc");
     }
 

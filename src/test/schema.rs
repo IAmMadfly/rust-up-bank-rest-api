@@ -75,7 +75,9 @@ fn assert_paths(name: &str, json: &Value, paths: &[&str]) {
 }
 
 fn has_items(json: &Value) -> bool {
-    json["data"].as_array().is_some_and(|items| !items.is_empty())
+    json["data"]
+        .as_array()
+        .is_some_and(|items| !items.is_empty())
 }
 
 #[test]
